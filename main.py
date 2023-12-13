@@ -5,7 +5,7 @@ import Player
 
 
 
-#Григойда
+#Григойдаа
 #изображение с частями карты
 tile_image = pygame.image.load("Assets/Tiles/Dungeon_Tileset.png")
 
