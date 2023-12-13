@@ -10,7 +10,7 @@ def get_image(sheet, width, hieght, x, y):
     return image
 
 
-
+#UwU
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls):
         super().__init__(group)
