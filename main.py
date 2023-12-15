@@ -3,7 +3,20 @@ import GenerateMap
 import Player
 
 
+class Camera:
+    def __init__(self):
+        self.dx = 0
+        self.dy = 0
 
+    # сдвинуть объект obj на смещение камеры
+    def apply(self, obj):
+        obj.rect.x += self.dx
+        obj.rect.y += self.dy
+
+    # позиционировать камеру на объекте target
+    def update(self, target):
+        self.dx = -(target.rect.x + target.rect.w // 2 - w // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - h // 2)
 
 #изображение с частями карты
 tile_image = pygame.image.load("Assets/Tiles/Dungeon_Tileset.png")
@@ -87,7 +100,7 @@ if __name__ == "__main__":
     #инцилизация класса PLAYER из файла Player.py
     player = Player.Player((200, 200), all_sprites, walls)
     all_sprites.add(player)
-
+    camera = Camera()
     clock = pygame.time.Clock()
     running = True
     FPS = 30
@@ -101,6 +114,11 @@ if __name__ == "__main__":
         # вот как раз обновление всех спрайтов и их отрисовка
         all_sprites.update()
         all_sprites.draw(screen)
+
+
+        camera.update(player)
+        for sprite in all_sprites:
+            camera.apply(sprite)
 
         pygame.display.flip()
 
