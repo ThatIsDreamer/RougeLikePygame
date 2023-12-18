@@ -18,7 +18,6 @@ class Camera:
         self.dx = -(target.rect.x + target.rect.w // 2 - w // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - h // 2)
 
-#Григойдаа
 #изображение с частями карты
 tile_image = pygame.image.load("Assets/Tiles/Dungeon_Tileset.png")
 
@@ -72,7 +71,7 @@ if __name__ == "__main__":
     #Группа со стенами для обработки столконовений везде с чем есть есть колизия добавлять сюда
     walls = pygame.sprite.Group()
 
-    #Проход по списку с картой можешь ишнорировать артем
+    #Проход по списку с картой
     x, y = 0, 0
     for el in tiles:
         for tile in el:
