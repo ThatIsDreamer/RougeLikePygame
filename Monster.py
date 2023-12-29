@@ -12,7 +12,7 @@ def get_image(sheet, width, hieght, x, y):
     return image
 
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, pos, group, walls):
+    def __init__(self, pos, group, walls, player):
         super().__init__(group)
         all_anims = ["skeleton_v2_1.png", "skeleton_v2_2.png",  "skeleton_v2_3.png", "skeleton_v2_4.png"]
         self.animations = [[], []]
@@ -31,6 +31,8 @@ class Monster(pygame.sprite.Sprite):
         self.walls = walls
         self.p_x = -0
         self.p_y = -0
+        self.mask = pygame.mask.from_surface(self.image)
+        self.player = player
 
     def move(self, dx=0, dy=0):
         if dx != 0:
@@ -54,7 +56,7 @@ class Monster(pygame.sprite.Sprite):
                         wall.rect.bottom for wall in pygame.sprite.spritecollide(self, self.walls, False))
 
     def player_move(self, player_x, player_y):
-        self.p_x  = player_x
+        self.p_x = player_x
         self.p_y = player_y
 
     def update(self):
@@ -75,3 +77,6 @@ class Monster(pygame.sprite.Sprite):
             self.curranimation = 0
 
         self.image = self.animations[self.currsprite][int(self.curranimation)]
+
+        if pygame.sprite.collide_mask(self, self.player):
+            self.player.get_damage()

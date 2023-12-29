@@ -1,6 +1,7 @@
 import pygame
 import GenerateMap
 import Player
+import Monster
 
 
 class Camera:
@@ -99,7 +100,11 @@ if __name__ == "__main__":
 
     #инцилизация класса PLAYER из файла Player.py
     player = Player.Player((200, 200), all_sprites, walls)
+    monster = Monster.Monster((400, 400), all_sprites, walls, player.mask)
+
     all_sprites.add(player)
+    all_sprites.add(monster)
+
     camera = Camera()
     clock = pygame.time.Clock()
     running = True

@@ -1,5 +1,5 @@
 import pygame
-from itertools import cycle
+
 
 def get_image(sheet, width, hieght, x, y):
     # pygame.SRCALPHA
@@ -10,14 +10,16 @@ def get_image(sheet, width, hieght, x, y):
     return image
 
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls):
         super().__init__(group)
         self.animations = []
         for i in range(3, 7):
-            self.animations.append([get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, i * 48) for j in range(6)])
-        self.animations.append([get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, 48) for j in range(1)])
+            self.animations.append(
+                [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, i * 48) for j in
+                 range(6)])
+        self.animations.append(
+            [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, 48) for j in range(1)])
 
         self.animations[3] = self.animations[1].copy()
         for i in range(len(self.animations[3])):
@@ -26,13 +28,13 @@ class Player(pygame.sprite.Sprite):
         self.attack_animations = []
         for i in range(7, 11):
             self.attack_animations.append(
-                [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, i * 48) for j in range(4)])
+                [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, i * 48) for j in
+                 range(4)])
         self.is_attacking = False
 
         self.attack_animations[-1] = self.attack_animations[1].copy()
         for i in range(len(self.attack_animations[3])):
             self.attack_animations[3][i] = pygame.transform.flip(self.attack_animations[3][i], True, False)
-
 
         self.image = self.animations[0][0]
         self.rect = self.image.get_rect(center=pos)
@@ -40,7 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 1.2
         self.curranimation = 3
         self.curr_sprite = 0
-
+        self.mask = pygame.mask.from_surface(self.image)
 
         self.walls = walls
 
@@ -65,13 +67,11 @@ class Player(pygame.sprite.Sprite):
                     self.rect.top = max(
                         wall.rect.bottom for wall in pygame.sprite.spritecollide(self, self.walls, False))
 
-
     def input(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE] and not self.is_attacking:
             self.is_attacking = True
-
 
         if keys[pygame.K_w]:
             self.direction.y = -1
@@ -92,16 +92,16 @@ class Player(pygame.sprite.Sprite):
         self.move(self.direction.x * self.speed, self.direction.y * self.speed)
 
         if not self.is_attacking:
-            #right
+            # right
             if self.direction[0] > 0:
                 self.curranimation = 1
-            #down
+            # down
             if self.direction[1] > 0:
                 self.curranimation = 0
-            #up
+            # up
             if self.direction[0] < 0:
                 self.curranimation = 3
-            #left
+            # left
             if self.direction[1] < 0:
                 self.curranimation = 2
             if self.direction[0] == 0 and self.direction[1] == 0:
@@ -120,3 +120,7 @@ class Player(pygame.sprite.Sprite):
                 self.curr_sprite = 0
                 self.is_attacking = False
             self.image = self.attack_animations[self.curranimation][int(self.curr_sprite)]
+
+    # Вот эту дрочильню ты делаешь по собственному желанию согласно статье 157 УК РФ
+    def get_damage(self):
+        pass
