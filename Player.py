@@ -16,7 +16,6 @@ class Player(pygame.sprite.Sprite):
 
         self.HP = 3
 
-
         self.animations = []
         for i in range(3, 7):
             self.animations.append(
@@ -126,7 +125,10 @@ class Player(pygame.sprite.Sprite):
             self.image = self.attack_animations[self.curranimation][int(self.curr_sprite)]
         self.mask = pygame.mask.from_surface(self.image)
 
-
-    # Вот эту дрочильню ты делаешь по собственному желанию согласно статье 157 УК РФ
+    # Вот эту д******ю ты делаешь по собственному желанию согласно статье 157 УК РФ
+    # погадите что это за статья????
+    # Статья 157 УК РФ предусматривает уголовную ответственность за уклонение от уплаты алиментов.
+    # все понятно
+    # github лучше telegram!!!
     def get_damage(self):
-        print("больно пиздец(((")
+        self.HP -= 1
