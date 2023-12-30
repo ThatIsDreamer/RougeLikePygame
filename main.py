@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
     #инцилизация класса PLAYER из файла Player.py
     player = Player.Player((4352, 4352), all_sprites, walls)
-    monster = Monster.Monster((4352, 4352), all_sprites, walls, player.mask)
+    monster = Monster.Monster((4352, 4352), all_sprites, walls, player)
 
     all_sprites.add(player)
     all_sprites.add(monster)

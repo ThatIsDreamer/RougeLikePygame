@@ -2,16 +2,11 @@ import csv
 import random
 
 
-
 class MapGenerator:
-
-
 
     def __init__(self, size):
         self.size = size
         self.map = [[-1 for _ in range(size)] for _ in range(size)]
-
-
 
     def load_csv(self, path) -> list:
         path = "Assets/MapBites/" + path
@@ -43,9 +38,13 @@ class MapGenerator:
         return True
 
     def is_free(self, x, y):
-        if self.map[y][x] != -1:
-            return False
-        return True
+        try:
+            if self.map[y][x] != -1:
+                return False
+            return True
+        except IndexError:
+            print(
+                "Мда дример, тебе стоило предусмотреть эту ошибку, не так много людей могут оценить её мастаб, она действительно тонкая")
 
     def place_tunel(self, dir, sx, sy, ex, ey):
         horiz_room = [
@@ -69,8 +68,6 @@ class MapGenerator:
             print(abs(ey - sy))
             for i in range(abs(ey - sy)):
                 self.place_room(vert_room, sx, sy + i)
-
-
 
     def saveMap(self, name) -> None:
         with open(f"{name}.csv", mode='w') as f:
@@ -112,7 +109,6 @@ class MapGenerator:
 
             self.prev_dir = dir
 
-
             nx, ny = 0, 0
             tunnel_length = 4
 
@@ -122,7 +118,6 @@ class MapGenerator:
 
                 if not self.is_free(nx, ny):
                     continue
-
 
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("horiz", self.prev_room[1] + 7, self.prev_room[2], nx + 1, ny)
@@ -159,7 +154,6 @@ class MapGenerator:
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("vert", self.prev_room[1], self.prev_room[2] - 1, nx, ny + 1)
 
-
-            #self.saveMap(amount)
+            # self.saveMap(amount)
             self.prev_room = [chosen_room, nx, ny]
             amount -= 1

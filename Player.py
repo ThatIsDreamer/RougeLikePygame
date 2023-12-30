@@ -124,7 +124,9 @@ class Player(pygame.sprite.Sprite):
                 self.curr_sprite = 0
                 self.is_attacking = False
             self.image = self.attack_animations[self.curranimation][int(self.curr_sprite)]
+        self.mask = pygame.mask.from_surface(self.image)
+
 
     # Вот эту дрочильню ты делаешь по собственному желанию согласно статье 157 УК РФ
     def get_damage(self):
-        pass
+        print("больно пиздец(((")

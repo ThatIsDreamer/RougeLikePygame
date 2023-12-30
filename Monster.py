@@ -77,5 +77,8 @@ class Monster(pygame.sprite.Sprite):
             self.curranimation = 0
 
         self.image = self.animations[self.currsprite][int(self.curranimation)]
+        self.mask = pygame.mask.from_surface(self.image)
+        if pygame.sprite.collide_mask(self, self.player):
+            self.player.get_damage()
 
 
