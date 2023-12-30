@@ -1,4 +1,5 @@
 import pygame
+
 import GenerateMap
 import Player
 import Monster
@@ -63,9 +64,10 @@ if __name__ == "__main__":
         tilesarr.append(temp)
 
     #генерация рандномной карты -> все в файле GenerateMap.py
-    test = GenerateMap.TileMap("test", 64)
-    tiles = test.GenerateMap(5)
-
+    test = GenerateMap.MapGenerator(128)
+    test.generate(20, "start.csv", ['start.csv'])
+    test.saveMap("Assets/MapBites/generatedMap")
+    tiles = test.load_csv("generatedMap.csv")
     #!!!!!ВАЖНО группа со всеми спрайтам все что будет появлятся на экране во время игры добовлять сюда
     all_sprites = pygame.sprite.Group()
 
@@ -99,8 +101,8 @@ if __name__ == "__main__":
     print(walls)
 
     #инцилизация класса PLAYER из файла Player.py
-    player = Player.Player((200, 200), all_sprites, walls)
-    monster = Monster.Monster((400, 400), all_sprites, walls, player.mask)
+    player = Player.Player((4352, 4352), all_sprites, walls)
+    monster = Monster.Monster((4352, 4352), all_sprites, walls, player.mask)
 
     all_sprites.add(player)
     all_sprites.add(monster)
@@ -108,17 +110,18 @@ if __name__ == "__main__":
     camera = Camera()
     clock = pygame.time.Clock()
     running = True
-    FPS = 30
+    FPS = 60
     while running:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill("white")
+        screen.fill(pygame.Color("#3C2539"))
         # вот как раз обновление всех спрайтов и их отрисовка
         all_sprites.update()
         all_sprites.draw(screen)
+        monster.player_move(player.rect.x + 32, player.rect.y + 64)
 
 
         camera.update(player)

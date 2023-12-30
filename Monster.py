@@ -7,7 +7,7 @@ def get_image(sheet, width, hieght, x, y):
     # pygame.SRCALPHA
     image = pygame.Surface((width, hieght), pygame.SRCALPHA)
     image.blit(sheet, (0, 0), (x, y, width, hieght))
-    image = pygame.transform.scale(image, (128, 128))
+    image = pygame.transform.scale(image, (64, 64))
 
     return image
 
@@ -78,5 +78,4 @@ class Monster(pygame.sprite.Sprite):
 
         self.image = self.animations[self.currsprite][int(self.curranimation)]
 
-        if pygame.sprite.collide_mask(self, self.player):
-            self.player.get_damage()
+

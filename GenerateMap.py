@@ -42,47 +42,9 @@ class MapGenerator:
                     return False
         return True
 
-    def can_fit_8x8_room(self, start_row, start_col, direction):
-        rows = len(self.map)
-        cols = len(self.map[0]) if rows > 0 else 0
-        room_size = 8
-
-        # Check if the room fits in the specified direction
-        if direction == "top":
-            if start_row - room_size + 1 < 0:
-                return False
-            for i in range(start_row, start_row - room_size, -1):
-                for j in range(start_col, min(cols, start_col + room_size)):
-                    if self.map[i][j] != -1:
-                        return False
-
-        elif direction == "bottom":
-            if start_row + room_size > rows:
-                return False
-            for i in range(start_row, start_row + room_size):
-                for j in range(start_col, min(cols, start_col + room_size)):
-                    if self.map[i][j] != -1:
-                        return False
-
-        elif direction == "left":
-            if start_col - room_size + 1 < 0:
-                return False
-            for i in range(start_row, min(rows, start_row + room_size)):
-                for j in range(start_col, start_col - room_size, -1):
-                    if self.map[i][j] != -1:
-                        return False
-
-        elif direction == "right":
-            if start_col + room_size > cols:
-                return False
-            for i in range(start_row, min(rows, start_row + room_size)):
-                for j in range(start_col, start_col + room_size):
-                    if self.map[i][j] != -1:
-                        return False
-
-        else:
-            raise ValueError("Invalid direction specified")
-
+    def is_free(self, x, y):
+        if self.map[y][x] != -1:
+            return False
         return True
 
     def place_tunel(self, dir, sx, sy, ex, ey):
@@ -100,9 +62,11 @@ class MapGenerator:
             [20, 11, 11, 11, 11, 11, 11, 35]
         ]
         if dir == "horiz":
+            print(abs(ex - sx), sx, sy, ex, ey, )
             for i in range(abs(ex - sx)):
                 self.place_room(horiz_room, sx + i, sy)
         else:
+            print(abs(ey - sy))
             for i in range(abs(ey - sy)):
                 self.place_room(vert_room, sx, sy + i)
 
@@ -116,15 +80,16 @@ class MapGenerator:
     def generate(self, amount, start_room_csv, rooms_as_csv):
         rooms = [self.load_csv(el) for el in rooms_as_csv]
         start_room = self.load_csv(start_room_csv)
-
+        print(self.size // 2 * 64, self.size // 2 * 64)
         # Place the starting room
         self.place_room(start_room, self.size // 2, self.size // 2)
         self.prev_room = [start_room, self.size // 2, self.size // 2]
         self.prev_dir = ''
-
+        self.funcounter = 0
 
         while amount > 0:
-            chosen_room = rooms[0]# Select a random room
+            chosen_room = random.choice(rooms)
+
             directions = ['top', 'bottom', 'left', 'right']
             opposite_dir = {
                 "left": "right",
@@ -133,8 +98,18 @@ class MapGenerator:
                 "bottom": "top"
             }
             dir = random.choice(directions)
+            print(dir)
             while opposite_dir.get(dir, "") == self.prev_dir:
                 dir = random.choice(directions)
+
+            if dir == self.prev_dir:
+                self.funcounter += 1
+
+            if self.funcounter >= 1:
+                while dir == self.prev_dir:
+                    dir = random.choice(directions)
+                self.funcounter = 0
+
             self.prev_dir = dir
 
 
@@ -145,6 +120,10 @@ class MapGenerator:
                 nx = self.prev_room[1] + tunnel_length + 7
                 ny = self.prev_room[2]
 
+                if not self.is_free(nx, ny):
+                    continue
+
+
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("horiz", self.prev_room[1] + 7, self.prev_room[2], nx + 1, ny)
 
@@ -152,13 +131,19 @@ class MapGenerator:
                 nx = self.prev_room[1] - tunnel_length - 7
                 ny = self.prev_room[2]
 
+                if not self.is_free(nx, ny):
+                    continue
+
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("horiz", nx + 7, ny, self.prev_room[1] + 1, self.prev_room[2])
 
 
             elif dir == 'top':
                 nx = self.prev_room[1]
-                ny = self.prev_room[2] - tunnel_length - 7
+                ny = self.prev_room[2] - tunnel_length - 8
+
+                if not self.is_free(nx, ny):
+                    continue
 
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("vert", nx, ny + 7, self.prev_room[1], self.prev_room[2] + 1)
@@ -166,13 +151,15 @@ class MapGenerator:
 
             elif dir == 'bottom':
                 nx = self.prev_room[1]
-                ny = self.prev_room[2] + tunnel_length + 7
+                ny = self.prev_room[2] + tunnel_length + 1
+
+                if not self.is_free(nx, ny):
+                    continue
 
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("vert", self.prev_room[1], self.prev_room[2] - 1, nx, ny + 1)
 
 
-            print(self.can_fit_8x8_room(self.prev_room[1], self.prev_room[2], dir))
-            self.saveMap(amount)
+            #self.saveMap(amount)
             self.prev_room = [chosen_room, nx, ny]
             amount -= 1

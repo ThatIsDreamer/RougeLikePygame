@@ -13,6 +13,10 @@ def get_image(sheet, width, hieght, x, y):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls):
         super().__init__(group)
+
+        self.HP = 3
+
+
         self.animations = []
         for i in range(3, 7):
             self.animations.append(
@@ -39,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations[0][0]
         self.rect = self.image.get_rect(center=pos)
         self.direction = pygame.math.Vector2()
-        self.speed = 1.2
+        self.speed = 3
         self.curranimation = 3
         self.curr_sprite = 0
         self.mask = pygame.mask.from_surface(self.image)
