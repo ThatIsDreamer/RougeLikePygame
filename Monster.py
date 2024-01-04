@@ -92,4 +92,3 @@ class Monster(pygame.sprite.Sprite):
             self.cooldown = True
             self.player.get_damage()
 
-
