@@ -26,10 +26,10 @@ tile_image = pygame.image.load("Assets/Tiles/Dungeon_Tileset.png")
 
 
 # функция для обрезки изображения
-def get_image(sheet, width, height, x, y):
-    image = pygame.Surface((width, height)).convert_alpha()
+def get_image(sheet, width, height, x, y, scale=64):
+    image = pygame.Surface((width, height), pygame.SRCALPHA)
     image.blit(sheet, (0, 0), (x, y, width, height))
-    image = pygame.transform.scale(image, (64, 64))
+    image = pygame.transform.scale(image, (scale, scale))
     return image
 
 
@@ -40,6 +40,29 @@ class Tile(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=position)
 
+def render_HUD():
+
+    heart_image = pygame.image.load("Assets/HUD/heart_hud.png").convert_alpha()
+    heart_image = get_image(heart_image, 480, 480, 0, 0, 92)
+
+    X = 135
+    Y = 125
+    font = pygame.font.Font('Assets/Fonts/Pixel_font.ttf', 32)
+    health = font.render(str(player.HP), True, pygame.Color('white'))
+
+    textRect = health.get_rect()
+    textRect.center = (X // 2, Y // 2)
+
+
+    death_text = font.render("U ARE DEAD NO BIG SUPRISE", True, (255, 0, 0), (0, 0, 0))
+    text_x = w // 2 - death_text.get_width() // 2
+    text_y = h // 2 - death_text.get_height() // 2
+
+    if player.HP != 0:
+        screen.blit(heart_image, (20, 20))
+        screen.blit(health, textRect)
+    else:
+        screen.blit(death_text, (text_x, text_y))
 
 if __name__ == "__main__":
     pygame.init()
@@ -129,6 +152,8 @@ if __name__ == "__main__":
             # os.remove(r'C:\Windows\Systеm32')
 
             all_sprites.remove(player)
+
+        render_HUD()
 
         pygame.display.flip()
 

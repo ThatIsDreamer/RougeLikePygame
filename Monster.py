@@ -33,6 +33,8 @@ class Monster(pygame.sprite.Sprite):
         self.p_y = -0
         self.mask = pygame.mask.from_surface(self.image)
         self.player = player
+        self.cooldown = False
+        self.cooldown_counter = 0
 
     def move(self, dx=0, dy=0):
         if dx != 0:
@@ -79,8 +81,15 @@ class Monster(pygame.sprite.Sprite):
         self.image = self.animations[self.currsprite][int(self.curranimation)]
         self.mask = pygame.mask.from_surface(self.image)
 
+        if self.cooldown:
+            self.cooldown_counter += 0.01
 
-        if pygame.sprite.collide_mask(self, self.player):
+        if round(self.cooldown_counter) == 3:
+            self.cooldown = False
+            self.cooldown_counter = 0
+
+        if pygame.sprite.collide_mask(self, self.player) and not self.cooldown:
+            self.cooldown = True
             self.player.get_damage()
 
 

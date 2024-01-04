@@ -1,5 +1,5 @@
 import pygame
-
+import math
 
 def get_image(sheet, width, hieght, x, y):
     # pygame.SRCALPHA
@@ -50,6 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.walls = walls
 
     def move(self, dx=0, dy=0):
+
         if dx != 0:
             self.rect.x += dx
             if pygame.sprite.spritecollide(self, self.walls, False):
@@ -131,4 +132,5 @@ class Player(pygame.sprite.Sprite):
     # все понятно
     # github лучше telegram!!!
     def get_damage(self):
-        self.HP -= 1
+        if self.HP != 0:
+            self.HP -= 1
