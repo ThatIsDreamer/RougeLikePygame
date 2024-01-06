@@ -87,14 +87,16 @@ if __name__ == "__main__":
 
     # генерация рандномной карты -> все в файле GenerateMap.py
     test = GenerateMap.MapGenerator(128)
-    test.generate(20, "start.csv", ['start.csv'])
+    test.generate(15, "start.csv", ['start.csv'])
     test.saveMap("Assets/MapBites/generatedMap")
     tiles = test.load_csv("generatedMap.csv")
     # !!!!!ВАЖНО группа со всеми спрайтам все что будет появлятся на экране во время игры добовлять сюда
     all_sprites = pygame.sprite.Group()
-
     # Группа со стенами для обработки столконовений везде с чем есть есть колизия добавлять сюда
     walls = pygame.sprite.Group()
+    #Группа со всеми монстрами я не умею русский :'(
+    monsters = pygame.sprite.Group()
+
 
     # Проход по списку с картой
     x, y = 0, 0
@@ -123,10 +125,15 @@ if __name__ == "__main__":
 
     # инцилизация класса PLAYER из файла Player.py
     player = Player.Player((4352, 4352), all_sprites, walls)
-    monster = Monster.Monster((4552, 4352), all_sprites, walls, player)
+    monster = Monster.Monster((4452, 4352), all_sprites, walls, player)
+
+
 
     all_sprites.add(player)
     all_sprites.add(monster)
+    monsters.add(monster)
+
+    player.set_monster_group(monsters)
 
     camera = Camera()
     clock = pygame.time.Clock()
@@ -148,9 +155,16 @@ if __name__ == "__main__":
         for sprite in all_sprites:
             camera.apply(sprite)
 
+        for mns in monsters:
+            if mns.HP <= 0:
+                all_sprites.remove(mns)
+                monsters.remove(mns)
+            print(mns.HP)
+
+
         if player.HP == 0:
             # TODO: при выборе сложности эксперт данное действие должно происходить
-            # os.remove(r'C:\Windows\Systеm32')
+            # os.remove(r'C:\Winbows\Systеm32')
 
             all_sprites.remove(player)
 

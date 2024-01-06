@@ -17,7 +17,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls):
         super().__init__(group)
 
-        self.HP = 3
+        self.HP = 5
+
+        self.radius = 110
 
         self.animations = []
         for i in range(3, 7):
@@ -32,15 +34,20 @@ class Player(pygame.sprite.Sprite):
             self.animations[3][i] = pygame.transform.flip(self.animations[3][i], True, False)
 
         self.attack_animations = []
-        for i in range(7, 11):
+        for i in range(7, 9):
             self.attack_animations.append(
                 [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, i * 48) for j in
                  range(4)])
+        self.attack_animations.append([])
+        for i in range(len(self.attack_animations[0])):
+            self.attack_animations[-1].append(pygame.transform.flip(self.attack_animations[0][i], True, False))
+        self.attack_animations.append(
+            [get_image(pygame.image.load(f'Assets/Characters/player.png'), 48, 48, j * 48, 6 * 48) for j in
+             range(4)])
+
+
         self.is_attacking = False
 
-        self.attack_animations[-1] = self.attack_animations[1].copy()
-        for i in range(len(self.attack_animations[3])):
-            self.attack_animations[3][i] = pygame.transform.flip(self.attack_animations[3][i], True, False)
 
         self.image = self.animations[0][0]
         self.rect = self.image.get_rect(center=pos)
@@ -51,6 +58,9 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
         self.walls = walls
+
+        self.cooldown = False
+        self.cooldown_counter = 0
 
     def move(self, dx=0, dy=0):
 
@@ -99,10 +109,31 @@ class Player(pygame.sprite.Sprite):
         surface.fill(tint_color, None, pygame.BLEND_RGB_ADD)
         return surface
 
+    def set_monster_group(self, monsters):
+        self.monsters = monsters
+
+
     def update(self):
         self.input()
         self.move(self.direction.x * self.speed, self.direction.y * self.speed)
 
+        print()
+
+        if self.cooldown:
+            self.cooldown_counter += 0.01
+
+        if round(self.cooldown_counter) == 3:
+            self.cooldown = False
+            self.cooldown_counter = 0
+
+        if self.is_attacking and not self.cooldown:
+            self.cooldown = True
+            if self.collide_with_monsters():
+                self.collide_with_monsters().get_damage()
+
+
+
+        #animations
         if not self.is_attacking:
             # right
             if self.direction[0] > 0:
@@ -125,9 +156,20 @@ class Player(pygame.sprite.Sprite):
                 self.curr_sprite = 0
             self.image = self.animations[self.curranimation][int(self.curr_sprite)]
         else:
+
             self.curr_sprite += 0.029
-            if self.curranimation == 4:
-                self.curranimation = 3
+            if self.direction[0] == 0 and self.direction[1] == 0:
+                self.curranimation = 0
+            else:
+                if self.direction[1] < 0:
+                    self.curranimation = 1
+                elif self.direction[0] > 0:
+                    self.curranimation = 0
+                elif self.direction[0] < 0:
+                    self.curranimation = 2
+                else:
+                    self.curranimation = 3
+
             if self.curr_sprite >= len(self.attack_animations[self.curranimation]) - 1:
                 self.curr_sprite = 0
                 self.is_attacking = False
@@ -142,8 +184,16 @@ class Player(pygame.sprite.Sprite):
     def get_damage(self):
         pygame.mixer.Sound.play(hit_sound)
 
-        for animation in self.animations:
-            for frame in animation:
-                frame = self.tint_surface(frame, 255)
+        for animid, animation in enumerate(self.animations):
+            for frameid,  frame in enumerate(animation):
+                self.animations[animid][frameid] = self.tint_surface(frame, (255, 0, 0))
         if self.HP != 0:
             self.HP -= 1
+
+
+    def collide_with_monsters(self):
+        for monster in self.monsters:
+            distance = ((self.rect.x - monster.rect.centerx) ** 2 + (self.rect.y - monster.rect.centery) ** 2) ** 0.5
+            if distance <= self.radius:
+                return monster
+        return None

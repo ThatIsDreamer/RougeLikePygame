@@ -14,6 +14,9 @@ def get_image(sheet, width, hieght, x, y):
 class Monster(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls, player):
         super().__init__(group)
+
+        self.HP = 2
+
         all_anims = ["skeleton_v2_1.png", "skeleton_v2_2.png",  "skeleton_v2_3.png", "skeleton_v2_4.png"]
         self.animations = [[], []]
         for i in range(4):
@@ -92,3 +95,6 @@ class Monster(pygame.sprite.Sprite):
             self.cooldown = True
             self.player.get_damage()
 
+
+    def get_damage(self):
+        self.HP -= 1

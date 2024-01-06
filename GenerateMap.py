@@ -103,7 +103,7 @@ class MapGenerator:
             if dir == self.prev_dir:
                 self.funcounter += 1
 
-            if self.funcounter >= 2:
+            if self.funcounter >= 1:
                 while dir == self.prev_dir:
                     dir = random.choice(directions)
                 self.funcounter = 0
