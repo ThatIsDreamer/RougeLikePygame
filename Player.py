@@ -9,6 +9,9 @@ def get_image(sheet, width, hieght, x, y):
 
     return image
 
+pygame.mixer.init()
+hit_sound = pygame.mixer.Sound("Assets/SFX/hit.wav")
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls):
@@ -91,6 +94,11 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
 
+    def tint_surface(self, surface, tint_color):
+        surface = surface.copy()
+        surface.fill(tint_color, None, pygame.BLEND_RGB_ADD)
+        return surface
+
     def update(self):
         self.input()
         self.move(self.direction.x * self.speed, self.direction.y * self.speed)
@@ -132,5 +140,10 @@ class Player(pygame.sprite.Sprite):
     # все понятно
     # github лучше telegram!!!
     def get_damage(self):
+        pygame.mixer.Sound.play(hit_sound)
+
+        for animation in self.animations:
+            for frame in animation:
+                frame = self.tint_surface(frame, 255)
         if self.HP != 0:
             self.HP -= 1

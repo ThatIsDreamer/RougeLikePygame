@@ -67,6 +67,7 @@ def render_HUD():
 if __name__ == "__main__":
     pygame.init()
 
+
     # штуки pygame БАЗА
     tile_group = pygame.sprite.Group()
     size = w, h = 1280, 1000

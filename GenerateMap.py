@@ -96,16 +96,20 @@ class MapGenerator:
             }
             dir = random.choice(directions)
             print(dir)
+
             while opposite_dir.get(dir, "") == self.prev_dir:
                 dir = random.choice(directions)
 
             if dir == self.prev_dir:
                 self.funcounter += 1
 
-            if self.funcounter >= 1:
+            if self.funcounter >= 2:
                 while dir == self.prev_dir:
                     dir = random.choice(directions)
                 self.funcounter = 0
+
+            if self.prev_dir == "":
+                dir = 'bottom'
 
             self.prev_dir = dir
 
@@ -135,7 +139,7 @@ class MapGenerator:
 
             elif dir == 'top':
                 nx = self.prev_room[1]
-                ny = self.prev_room[2] - tunnel_length - 8
+                ny = self.prev_room[2] - tunnel_length - 7
 
                 if not self.is_free(nx, ny):
                     continue
@@ -146,13 +150,12 @@ class MapGenerator:
 
             elif dir == 'bottom':
                 nx = self.prev_room[1]
-                ny = self.prev_room[2] + tunnel_length + 1
-
+                ny = self.prev_room[2] + tunnel_length + 7
                 if not self.is_free(nx, ny):
                     continue
 
                 self.place_room(chosen_room, nx, ny)
-                self.place_tunel("vert", self.prev_room[1], self.prev_room[2] - 1, nx, ny + 1)
+                self.place_tunel("vert", self.prev_room[1], self.prev_room[2] + 7, nx, ny + 1)
 
             # self.saveMap(amount)
             self.prev_room = [chosen_room, nx, ny]
