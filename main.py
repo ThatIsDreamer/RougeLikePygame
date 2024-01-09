@@ -171,7 +171,6 @@ if __name__ == "__main__":
         render_HUD()
 
         pygame.display.flip()
-
     pygame.display.flip()
     clock.tick(FPS)
 

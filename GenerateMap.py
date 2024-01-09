@@ -1,6 +1,6 @@
 import csv
 import random
-
+import Monster
 
 class MapGenerator:
 

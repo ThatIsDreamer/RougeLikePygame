@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         self.HP = 5
 
-        self.radius = 110
+        self.radius = 80
 
         self.animations = []
         for i in range(3, 7):
@@ -61,6 +61,9 @@ class Player(pygame.sprite.Sprite):
 
         self.cooldown = False
         self.cooldown_counter = 0
+
+
+
 
     def move(self, dx=0, dy=0):
 
@@ -117,19 +120,15 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.move(self.direction.x * self.speed, self.direction.y * self.speed)
 
-        print()
 
-        if self.cooldown:
-            self.cooldown_counter += 0.01
-
-        if round(self.cooldown_counter) == 3:
-            self.cooldown = False
-            self.cooldown_counter = 0
 
         if self.is_attacking and not self.cooldown:
             self.cooldown = True
             if self.collide_with_monsters():
                 self.collide_with_monsters().get_damage()
+            else:
+                for monster in pygame.sprite.spritecollide(self, self.monsters, False):
+                    monster.get_damage()
 
 
 
@@ -173,6 +172,7 @@ class Player(pygame.sprite.Sprite):
             if self.curr_sprite >= len(self.attack_animations[self.curranimation]) - 1:
                 self.curr_sprite = 0
                 self.is_attacking = False
+                self.cooldown = False
             self.image = self.attack_animations[self.curranimation][int(self.curr_sprite)]
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -182,12 +182,19 @@ class Player(pygame.sprite.Sprite):
     # все понятно
     # github лучше telegram!!!
     def get_damage(self):
-        pygame.mixer.Sound.play(hit_sound)
+
 
         for animid, animation in enumerate(self.animations):
             for frameid,  frame in enumerate(animation):
                 self.animations[animid][frameid] = self.tint_surface(frame, (255, 0, 0))
+
+        for animid, animation in enumerate(self.attack_animations):
+            for frameid,  frame in enumerate(animation):
+                self.attack_animations[animid][frameid] = self.tint_surface(frame, (255, 0, 0))
+
+
         if self.HP != 0:
+            pygame.mixer.Sound.play(hit_sound)
             self.HP -= 1
 
 

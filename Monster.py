@@ -11,6 +11,10 @@ def get_image(sheet, width, hieght, x, y):
 
     return image
 
+
+pygame.mixer.init()
+hit_sound = pygame.mixer.Sound("Assets/SFX/skeleton_hit.wav")
+
 class Monster(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls, player):
         super().__init__(group)
@@ -98,3 +102,13 @@ class Monster(pygame.sprite.Sprite):
 
     def get_damage(self):
         self.HP -= 1
+        pygame.mixer.Sound.play(hit_sound)
+
+        for animid, animation in enumerate(self.animations):
+            for frameid,  frame in enumerate(animation):
+                self.animations[animid][frameid] = self.tint_surface(frame, (64, 0, 0))
+
+    def tint_surface(self, surface, tint_color):
+        surface = surface.copy()
+        surface.fill(tint_color, None, pygame.BLEND_RGB_ADD)
+        return surface
