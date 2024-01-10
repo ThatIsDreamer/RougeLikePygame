@@ -181,6 +181,7 @@ class Player(pygame.sprite.Sprite):
     # Статья 157 УК РФ предусматривает уголовную ответственность за уклонение от уплаты алиментов.
     # все понятно
     # github лучше telegram!!!
+    # вот да
     def get_damage(self):
 
 

@@ -24,7 +24,7 @@ class Chest(pygame.sprite.Sprite):
                 img = pygame.transform.scale(img, (84, 84))
                 s = d[s]
                 self.animations.append(img)
-        img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, s)
+        img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, 96)
         img = pygame.transform.scale(img, (84, 84))
         self.animations.append(img)
         self.image = self.animations[0]
@@ -32,14 +32,19 @@ class Chest(pygame.sprite.Sprite):
         self.player = player
         self.curranimation = 0
         self.mask = pygame.mask.from_surface(self.image)
+        self.opened = False
+        self.opening = False
 
     def try_to_open(self):
-        if pygame.sprite.collide_mask(self, self.player):
-            print(self.animations)
-            while int(self.curranimation) <= 7:
-                self.image = self.animations[int(self.curranimation)]
-                self.curranimation += 0.000004
-            self.image = self.animations[7]
+        if pygame.sprite.collide_mask(self, self.player) and not self.opened:
+            self.opening = True
 
     def update(self):
-        pass
+        if self.opening:
+            self.curranimation += 0.04
+            if int(self.curranimation) < 7:
+                self.image = self.animations[int(self.curranimation)]
+            else:
+                self.image = self.animations[7]
+                self.opening = False
+                self.opened = False

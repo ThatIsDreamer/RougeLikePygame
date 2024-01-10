@@ -3,6 +3,7 @@ import os
 import GenerateMap
 import Player
 import Monster
+import Chest
 
 
 class Camera:
@@ -120,12 +121,12 @@ if __name__ == "__main__":
             x += 1
         y += 1
         x = 0
-
     print(walls)
 
     # инцилизация класса PLAYER из файла Player.py
     player = Player.Player((4352, 4352), all_sprites, walls)
     monster = Monster.Monster((4452, 4352), all_sprites, walls, player)
+    chest = Chest.Chest((4402, 4302), all_sprites, walls, player)
 
 
 
@@ -144,6 +145,9 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    chest.try_to_open()
 
         screen.fill(pygame.Color("#3C2539"))
         # вот как раз обновление всех спрайтов и их отрисовка
