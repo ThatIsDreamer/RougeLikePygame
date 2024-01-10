@@ -9,6 +9,8 @@ def get_image(sheet, width, hieght, x, y):
 
     return image
 
+# гойда
+
 
 class Chest(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls, player):
