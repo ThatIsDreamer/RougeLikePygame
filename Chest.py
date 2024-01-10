@@ -20,10 +20,10 @@ class Chest(pygame.sprite.Sprite):
         d = {32: 64, 64: 32}
         s = 32
         for i in range(6):
-                img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, s)
-                img = pygame.transform.scale(img, (84, 84))
-                s = d[s]
-                self.animations.append(img)
+            img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, s)
+            img = pygame.transform.scale(img, (84, 84))
+            s = d[s]
+            self.animations.append(img)
         img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, 96)
         img = pygame.transform.scale(img, (84, 84))
         self.animations.append(img)
