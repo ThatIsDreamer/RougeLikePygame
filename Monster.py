@@ -74,7 +74,8 @@ class Monster(pygame.sprite.Sprite):
         distance = math.sqrt(temp_x ** 2 + temp_y ** 2)
         if distance > 0:
             temp_x, temp_y = temp_x / distance, temp_y / distance
-        self.move(temp_x * self.speed, temp_y * self.speed)
+        if distance <= 500:
+            self.move(temp_x * self.speed, temp_y * self.speed)
 
         if self.p_x > self.rect.x:
             self.currsprite = 1
@@ -98,7 +99,6 @@ class Monster(pygame.sprite.Sprite):
         if pygame.sprite.collide_mask(self, self.player) and not self.cooldown:
             self.cooldown = True
             self.player.get_damage()
-
 
     def get_damage(self):
         self.HP -= 1

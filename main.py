@@ -161,6 +161,7 @@ if __name__ == "__main__":
 
         for mns in monsters:
             if mns.HP <= 0:
+                player.score += 100
                 all_sprites.remove(mns)
                 monsters.remove(mns)
             print(mns.HP)

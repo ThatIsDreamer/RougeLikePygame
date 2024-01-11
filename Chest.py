@@ -50,3 +50,4 @@ class Chest(pygame.sprite.Sprite):
                 self.image = self.animations[7]
                 self.opening = False
                 self.opened = False
+                self.player.score += 500

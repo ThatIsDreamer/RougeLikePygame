@@ -56,6 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.curranimation = 3
         self.curr_sprite = 0
         self.mask = pygame.mask.from_surface(self.image)
+        self.score = 0
 
         self.walls = walls
 
