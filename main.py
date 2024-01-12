@@ -54,6 +54,11 @@ def render_HUD():
     textRect = health.get_rect()
     textRect.center = (X // 2, Y // 2)
 
+    scoretxt = font.render(str(player.score), True, pygame.Color('white'))
+
+
+    scoretxtRect = scoretxt.get_rect()
+    scoretxtRect.center = (2300 // 2, Y // 2)
 
     death_text = font.render("U ARE DEAD NO BIG SUPRISE", True, (255, 0, 0), (0, 0, 0))
     text_x = w // 2 - death_text.get_width() // 2
@@ -62,6 +67,7 @@ def render_HUD():
     if player.HP != 0:
         screen.blit(heart_image, (20, 20))
         screen.blit(health, textRect)
+        screen.blit(scoretxt, scoretxtRect)
     else:
         screen.blit(death_text, (text_x, text_y))
 

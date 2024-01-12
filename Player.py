@@ -2,7 +2,7 @@ import pygame
 import math
 
 def get_image(sheet, width, hieght, x, y):
-    # pygame.SRCALPHA
+
     image = pygame.Surface((width, hieght), pygame.SRCALPHA)
     image.blit(sheet, (0, 0), (x, y, width, hieght))
     image = pygame.transform.scale(image, (144, 144))
@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations[0][0]
         self.rect = self.image.get_rect(center=pos)
         self.direction = pygame.math.Vector2()
-        self.speed = 3
+        self.speed = 6
         self.curranimation = 3
         self.curr_sprite = 0
         self.mask = pygame.mask.from_surface(self.image)
@@ -110,7 +110,7 @@ class Player(pygame.sprite.Sprite):
 
     def tint_surface(self, surface, tint_color):
         surface = surface.copy()
-        surface.fill(tint_color, None, pygame.BLEND_RGB_ADD)
+        #surface.fill(tint_color, None, pygame.BLEND_RGB_ADD)
         return surface
 
     def set_monster_group(self, monsters):

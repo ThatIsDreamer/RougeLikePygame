@@ -9,8 +9,6 @@ def get_image(sheet, width, hieght, x, y):
 
     return image
 
-# гойда
-
 
 class Chest(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls, player):
@@ -40,6 +38,8 @@ class Chest(pygame.sprite.Sprite):
     def try_to_open(self):
         if pygame.sprite.collide_mask(self, self.player) and not self.opened:
             self.opening = True
+            #Мда артем такое забыть добавить....
+            self.opened = True
 
     def update(self):
         if self.opening:
