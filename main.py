@@ -3,7 +3,8 @@ import GenerateMap
 import Player
 import Monster
 import Chest
-
+import Rofls_with_db_and_csv
+import Weapon
 
 class Camera:
     def __init__(self):
@@ -72,6 +73,7 @@ def render_HUD():
 
 if __name__ == "__main__":
     pygame.init()
+    Rofls_with_db_and_csv.create_db_and_csv()
 
 
     # штуки pygame БАЗА
@@ -132,8 +134,7 @@ if __name__ == "__main__":
     player = Player.Player((4352, 4352), all_sprites, walls)
     monster = Monster.Monster((4452, 4352), all_sprites, walls, player)
     chest = Chest.Chest((4402, 4302), all_sprites, walls, player)
-
-
+    weapon = Weapon.Weapon((4402, 4252), all_sprites, player, Rofls_with_db_and_csv.select_weapon())
 
     all_sprites.add(player)
     all_sprites.add(monster)
@@ -145,6 +146,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     running = True
     FPS = 60
+    print(all_sprites)
     while running:
 
         for event in pygame.event.get():
@@ -153,6 +155,7 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     chest.try_to_open()
+
 
         screen.fill(pygame.Color("#3C2539"))
         # вот как раз обновление всех спрайтов и их отрисовка

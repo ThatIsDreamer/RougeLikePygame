@@ -1,4 +1,6 @@
 import pygame
+import Rofls_with_db_and_csv
+import Weapon
 
 
 def get_image(sheet, width, hieght, x, y):
@@ -13,8 +15,12 @@ def get_image(sheet, width, hieght, x, y):
 class Chest(pygame.sprite.Sprite):
     def __init__(self, pos, group, walls, player):
         super().__init__(group)
+
+        self.group = group
+        self.pos = pos
+
         self.animations = []
-        img = get_image(pygame.image.load(f'Assets/Characters/chest.png'), 32, 32, 0, 0)
+        img = get_image(pygame.image.load('Assets/Characters/chest.png'), 32, 32, 0, 0)
         img = pygame.transform.scale(img, (84, 84))
         self.animations.append(img)
         d = {32: 64, 64: 32}
@@ -34,7 +40,7 @@ class Chest(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.opened = False
         self.opening = False
-        # вот тут случайно выбирается оружие self.content =
+        self.content = Rofls_with_db_and_csv.select_weapon()
 
     def try_to_open(self):
         if pygame.sprite.collide_mask(self, self.player) and not self.opened:
@@ -42,6 +48,9 @@ class Chest(pygame.sprite.Sprite):
             #Мда артем такое забыть добавить....
             # self.opened = True
             # Гений, это в update уже есть
+        if pygame.sprite.collide_mask(self, self.player) and self.opened:
+            self.weapon.take_weapon()
+            return True
 
     def update(self):
         if self.opening:

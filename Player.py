@@ -47,6 +47,8 @@ class Player(pygame.sprite.Sprite):
 
 
         self.is_attacking = False
+        self.weapon_stats = ['0', 'Hand_Sword', '1.0']
+        self.atack = 1.0
 
 
         self.image = self.animations[0][0]
@@ -206,3 +208,7 @@ class Player(pygame.sprite.Sprite):
             if distance <= self.radius:
                 return monster
         return None
+
+    def drop_weapon(self, weapon):
+        self.weapon_stats = weapon.weapon_stats
+        self.atack = weapon.damage

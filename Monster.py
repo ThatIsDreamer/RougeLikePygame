@@ -101,7 +101,7 @@ class Monster(pygame.sprite.Sprite):
             self.player.get_damage()
 
     def get_damage(self):
-        self.HP -= 1
+        self.HP -= self.player.atack
         pygame.mixer.Sound.play(hit_sound)
 
         for animid, animation in enumerate(self.animations):
