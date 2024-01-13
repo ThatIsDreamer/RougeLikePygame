@@ -1,5 +1,4 @@
 import pygame
-import os
 import GenerateMap
 import Player
 import Monster

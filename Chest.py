@@ -34,12 +34,14 @@ class Chest(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.opened = False
         self.opening = False
+        # вот тут случайно выбирается оружие self.content =
 
     def try_to_open(self):
         if pygame.sprite.collide_mask(self, self.player) and not self.opened:
             self.opening = True
             #Мда артем такое забыть добавить....
-            self.opened = True
+            # self.opened = True
+            # Гений, это в update уже есть
 
     def update(self):
         if self.opening:
@@ -49,5 +51,5 @@ class Chest(pygame.sprite.Sprite):
             else:
                 self.image = self.animations[7]
                 self.opening = False
-                self.opened = False
+                self.opened = True
                 self.player.score += 500
