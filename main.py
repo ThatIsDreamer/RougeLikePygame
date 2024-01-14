@@ -134,7 +134,9 @@ if __name__ == "__main__":
     player = Player.Player((4352, 4352), all_sprites, walls)
     monster = Monster.Monster((4452, 4352), all_sprites, walls, player)
     chest = Chest.Chest((4402, 4302), all_sprites, walls, player)
-    weapon = Weapon.Weapon((4402, 4252), all_sprites, player, Rofls_with_db_and_csv.select_weapon())
+    weapon = Weapon.Weapon((4402, 4302), all_sprites, player, chest,
+                           Rofls_with_db_and_csv.select_weapon())
+    chest.weapon = weapon
 
     all_sprites.add(player)
     all_sprites.add(monster)
@@ -155,6 +157,7 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     chest.try_to_open()
+                    weapon.take_weapon()
 
 
         screen.fill(pygame.Color("#3C2539"))

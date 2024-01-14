@@ -13,11 +13,12 @@ def get_image(sheet, width, hieght, x, y):
 
 
 class Chest(pygame.sprite.Sprite):
-    def __init__(self, pos, group, walls, player):
+    def __init__(self, pos, group, walls, player, weapon=None):
         super().__init__(group)
 
         self.group = group
         self.pos = pos
+        self.weapon = weapon
 
         self.animations = []
         img = get_image(pygame.image.load('Assets/Characters/chest.png'), 32, 32, 0, 0)
@@ -48,9 +49,6 @@ class Chest(pygame.sprite.Sprite):
             #Мда артем такое забыть добавить....
             # self.opened = True
             # Гений, это в update уже есть
-        if pygame.sprite.collide_mask(self, self.player) and self.opened:
-            self.weapon.take_weapon()
-            return True
 
     def update(self):
         if self.opening:
@@ -62,3 +60,4 @@ class Chest(pygame.sprite.Sprite):
                 self.opening = False
                 self.opened = True
                 self.player.score += 500
+                self.weapon.print()
