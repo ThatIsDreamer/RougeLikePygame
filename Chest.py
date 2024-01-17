@@ -60,4 +60,6 @@ class Chest(pygame.sprite.Sprite):
                 self.opening = False
                 self.opened = True
                 self.player.score += 500
+                if self.player.HP != 0:
+                    self.player.HP += 3
                 self.weapon.print()

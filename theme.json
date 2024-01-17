@@ -1,0 +1,10 @@
+{
+    "button": {
+        "font": {
+            "name": "Pixel_font",
+            "bold": "0",
+            "italic": "0",
+            "regular_path": "Assets/Fonts/Pixel_font.ttf"
+        }
+    }
+}

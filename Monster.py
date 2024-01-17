@@ -75,7 +75,7 @@ class Monster(pygame.sprite.Sprite):
         if distance > 0:
             temp_x, temp_y = temp_x / distance, temp_y / distance
         if distance <= 500:
-            self.move(temp_x * self.speed, temp_y * self.speed)
+            self.move(round(temp_x), round(temp_y))
 
         if self.p_x > self.rect.x:
             self.currsprite = 1

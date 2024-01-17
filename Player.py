@@ -54,7 +54,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations[0][0]
         self.rect = self.image.get_rect(center=pos)
         self.direction = pygame.math.Vector2()
-        self.speed = 6
+        self.speed = 10
         self.curranimation = 3
         self.curr_sprite = 0
         self.mask = pygame.mask.from_surface(self.image)
@@ -152,14 +152,14 @@ class Player(pygame.sprite.Sprite):
             if self.direction[0] == 0 and self.direction[1] == 0:
                 self.curranimation = 4
 
-            self.curr_sprite += 0.03
+            self.curr_sprite += 0.04
 
             if self.curr_sprite >= len(self.animations[self.curranimation]) - 1:
                 self.curr_sprite = 0
             self.image = self.animations[self.curranimation][int(self.curr_sprite)]
         else:
 
-            self.curr_sprite += 0.029
+            self.curr_sprite += 0.04
             if self.direction[0] == 0 and self.direction[1] == 0:
                 self.curranimation = 0
             else:

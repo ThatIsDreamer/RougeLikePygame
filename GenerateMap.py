@@ -1,12 +1,13 @@
 import csv
 import random
-import Monster
+
 
 class MapGenerator:
 
     def __init__(self, size):
         self.size = size
         self.map = [[-1 for _ in range(size)] for _ in range(size)]
+
 
     def load_csv(self, path) -> list:
         path = "Assets/MapBites/" + path
@@ -74,7 +75,7 @@ class MapGenerator:
             for el in self.map:
                 print(*el, file=f, sep=',')
 
-    def generate(self, amount, start_room_csv, rooms_as_csv):
+    def generate(self, amount, start_room_csv, rooms_as_csv, monsters):
         rooms = [self.load_csv(el) for el in rooms_as_csv]
         start_room = self.load_csv(start_room_csv)
         print(self.size // 2 * 64, self.size // 2 * 64)
@@ -156,6 +157,21 @@ class MapGenerator:
 
                 self.place_room(chosen_room, nx, ny)
                 self.place_tunel("vert", self.prev_room[1], self.prev_room[2] + 7, nx, ny + 1)
+
+            if amount != 1:
+                for i in range(monsters):
+                    enemyposx, enemyposy = random.randint(2, 6), random.randint(2, 6)
+                    while self.map[ny + enemyposy][nx + enemyposx] == 100 and self.map[ny + enemyposy][nx + enemyposx] == 101:
+                        enemyposx, enemyposy = random.randint(2, 6), random.randint(2, 6)
+                    self.map[ny + enemyposy][nx + enemyposx] = 100
+
+            chanse = random.randint(1, 100)
+            if chanse >= 30 and chanse <= 40:
+                self.map[ny + 4][nx + 4] = 101
+
+            if amount == 1:
+                self.map[ny + 4][nx + 4] = 102
+
 
             # self.saveMap(amount)
             self.prev_room = [chosen_room, nx, ny]
