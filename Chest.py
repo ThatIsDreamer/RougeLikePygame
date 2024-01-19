@@ -1,5 +1,5 @@
 import pygame
-import Rofls_with_db_and_csv
+import Database
 import Weapon
 
 
@@ -41,7 +41,7 @@ class Chest(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.opened = False
         self.opening = False
-        self.content = Rofls_with_db_and_csv.select_weapon()
+        self.content = Database.select_weapon()
 
     def try_to_open(self):
         if pygame.sprite.collide_mask(self, self.player) and not self.opened:

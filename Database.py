@@ -10,6 +10,7 @@ def create_db_and_csv():
         cur = conn.cursor()
         cur.execute("""CREATE TABLE IF NOT EXISTS scores(
             total_value int)""")
+        conn.commit()
         conn.close()
 
         roflil.move('results.sqlite3', 'Assets/Data/results.sqlite3')
@@ -26,7 +27,7 @@ def create_db_and_csv():
 
 
 def get_best_value():
-    conn = sqlite3.connect('results.sqlite3')
+    conn = sqlite3.connect('Assets/Data/results.sqlite3')
     cur = conn.cursor()
     res = cur.execute("""SELECT MAX(total_value) FROM scores""").fetchone()
     conn.close()
@@ -34,9 +35,10 @@ def get_best_value():
 
 
 def insert_value(score):
-    conn = sqlite3.connect('results.sqlite3')
+    conn = sqlite3.connect('Assets/Data/results.sqlite3')
     cur = conn.cursor()
     cur.execute(f"""INSERT INTO scores(total_value) VALUES({score})""")
+    conn.commit()
     conn.close()
 
 

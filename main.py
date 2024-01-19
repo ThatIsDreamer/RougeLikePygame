@@ -5,7 +5,7 @@ import GenerateMap
 import Player
 import Monster
 import Chest
-import Rofls_with_db_and_csv
+import Database
 import Weapon
 import Door
 
@@ -66,7 +66,7 @@ def add_obj():
             if tile == 101:
                 chest = Chest.Chest((64 * x, 64 * y), all_sprites, walls, player)
                 weapon = Weapon.Weapon((64 * x, 64 * y), all_sprites, player, chest,
-                                       Rofls_with_db_and_csv.select_weapon())
+                                       Database.select_weapon())
                 chest.weapon = weapon
             if tile == 102:
                 door = Door.door((64 * x, 64 * y), all_sprites, player)
@@ -92,7 +92,7 @@ class Tile(pygame.sprite.Sprite):
 
 
 def render_HUD():
-    global retry_button
+    global retry_button, hasinserted
     heart_image = pygame.image.load("Assets/HUD/heart_hud.png").convert_alpha()
     heart_image = get_image(heart_image, 480, 480, 0, 0, 92)
 
@@ -126,6 +126,9 @@ def render_HUD():
         all_sprites.remove(player)
         for mns in monsters:
             mns.player_move(mns.rect.x, mns.rect.y)
+        if not hasinserted:
+            Database.insert_value(player.score)
+            hasinserted = True
 
         manager.draw_ui(screen)
         wintxt = font.render("You reached the end!", True, pygame.Color('white'))
@@ -140,13 +143,23 @@ def draw_menu():
 
     title = font.render("Echo Quest", True, pygame.Color('white'))
 
-    screen.blit(title, (320, 200))
+    smallerfont = pygame.font.Font('Assets/Fonts/Pixel_font.ttf', 32)
 
+    highscoretxt = smallerfont.render("high score:", True, pygame.Color("white"))
+
+
+    scoretxt = smallerfont.render(str(Database.get_best_value()), True, pygame.Color("white"))
+
+    screen.blit(title, (320, 200))
+    screen.blit(highscoretxt, (380, 400))
+    screen.blit(scoretxt, (750, 400))
     manager.draw_ui(screen)
 
 def initialize_game():
-    global all_sprites, walls, monsters, player, chest, weapon, tiles, GAME_END
+    global all_sprites, walls, monsters, player, chest, weapon, tiles, GAME_END, hasinserted
     GAME_END = False
+    hasinserted = False
+
     all_sprites = pygame.sprite.Group()
     walls = pygame.sprite.Group()
     monsters = pygame.sprite.Group()
@@ -169,11 +182,11 @@ def initialize_game():
 if __name__ == "__main__":
     pygame.init()
     pygame.display.set_icon(pygame.image.load('Assets/HUD/EQ.png'))
-    Rofls_with_db_and_csv.create_db_and_csv()
+    Database.create_db_and_csv()
     font = pygame.font.Font('Assets/Fonts/Pixel_font.ttf', 32)
     MENU = True
     GAME_END = False
-
+    hasinserted = False
     # штуки pygame БАЗА
     tile_group = pygame.sprite.Group()
     size = w, h = 1280, 1000
